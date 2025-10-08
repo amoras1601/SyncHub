@@ -1,6 +1,6 @@
 # SyncHub
 
-O SyncHub é uma plataforma SaaS (Software as a Service) projetada para centralizar e automatizar a gestão de vendas para pequenos e médios comerciantes que atuam em múltiplos marketplaces online, como Mercado Livre, Shopee, Amazon, entre outros.
+O SyncHub é uma plataforma SaaS (Software as a Service) projetada para centralizar e automatizar a gestão de vendas para pequenos e médios comerciantes que atuam em múltiplos marketplaces online, como Mercado Livre, Shopee, Amazon, entre outros..
 
 ## Arquitetura do Sistema
 
