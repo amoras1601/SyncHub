@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SyncHub</title>
+    <link rel="stylesheet" href="{% static 'css/ui.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/htmx.org@1.10.0"></script>
+        <script>
+            function openModal() {
+                document.getElementById('overlay').classList.remove('hidden');
+            }
+            function closeModal() {
+                document.getElementById('overlay').classList.add('hidden');
+                document.getElementById('modal-body').innerHTML = ''; 
+            }
+            function toggleView() {
+                const table = document.getElementById('table-view');
+                const grid = document.getElementById('grid-view');
+                const toggle = document.getElementById('toggle-view');
+                if (grid.classList.contains('hidden')) {
+                    grid.classList.remove('hidden');
+                    table.classList.add('hidden');
+                    toggle.textContent = 'Tabela';
+                } else {
+                    grid.classList.add('hidden');
+                    table.classList.remove('hidden');
+                    toggle.textContent = 'Grid';
+                }
+            }
+            // When HTMX swaps content into the modal, ensure it's visible
+            document.body.addEventListener('htmx:afterSwap', (e) => {
+                const id = e.detail.target.id;
+                if (id === 'modal-body') {
+                    openModal();
+                }
+                // If a new product row was inserted into the table, close the modal
+                if (id === 'produtos-tbody') {
+                    // give a short delay so user sees the inserted row animation
+                    setTimeout(() => closeModal(), 150);
+                }
+            });
+            // close modal on ESC
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+            function toggleAvatarMenu() {
+                const menu = document.getElementById('avatar-menu');
+                if (!menu) return;
+                menu.classList.toggle('hidden');
+            }
+            // close avatar menu when clicking outside
+            document.addEventListener('click', (e) => {
+                const menu = document.getElementById('avatar-menu');
+                const avatar = document.getElementById('avatar-btn');
+                if (!menu || !avatar) return;
+                if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !avatar.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        </script>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="logo">SH</div>
+            <nav>
+                <a href="/" class="active" title="Início">🏠</a>
+                <a href="/core/produtos/" title="Produtos">📦</a>
+                <a href="/core/lojas/" title="Lojas">🏬</a>
+                <a href="/core/anuncios/" title="Anúncios">📣</a>
+                <a href="/ml/" title="Mercado Livre">🛒</a>
+            </nav>
+            <div style="flex:1"></div>
+            {% if request.user.is_authenticated %}
+                <div class="avatar" id="avatar-btn" onclick="toggleAvatarMenu()">{{ request.user.username|slice:":1"|upper }}</div>
+            {% else %}
+                <a class="btn" href="{% url 'login' %}">Entrar</a>
+            {% endif %}
+        </aside>
+        <div class="main">
+            <div class="top-search">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="width:36px; height:36px; border-radius:8px; background:linear-gradient(135deg,var(--primary-400),var(--primary-500)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700">SH</div>
+                    <div style="min-width:320px">
+                        <input class="search-input" placeholder="Buscar produtos, lojas, anúncios..." />
+                    </div>
+                </div>
+                <div class="top-actions">
+                    <div style="position:relative">
+                        <button class="btn ghost">🔔 <span class="badge" style="margin-left:8px;">3</span></button>
+                    </div>
+                    <div style="position:relative">
+                        {% if request.user.is_authenticated %}
+                            <div style="display:flex; gap:8px; align-items:center">
+                                <div class="avatar" id="avatar-btn-top" onclick="toggleAvatarMenu()">{{ request.user.username|slice:":1"|upper }}</div>
+                            </div>
+                        {% endif %}
+                        <div id="avatar-menu" class="hidden" style="position:absolute; right:0; margin-top:8px; background:var(--neutral-0); border-radius:8px; box-shadow:var(--shadow-3); overflow:hidden;">
+                            <a class="btn ghost" href="{% url 'profile' %}" style="display:block; width:100%; text-align:left; padding:10px 14px;">Perfil</a>
+                            <a class="btn ghost" href="{% url 'logout' %}" style="display:block; width:100%; text-align:left; padding:10px 14px;">Sair</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal overlay -->
+            <div id="overlay" class="hidden" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.35); z-index:1200;">
+                <div id="modal" style="width:min(760px,95%);">
+                    <div id="modal-body"></div>
+                </div>
+            </div>
+            <main style="flex:1;">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+        <!-- Modal overlay -->
+        <div id="overlay" class="hidden" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.35); z-index:1200;">
+            <div id="modal" style="width:min(760px,95%);">
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</body>
+</html>
