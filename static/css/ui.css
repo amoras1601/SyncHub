@@ -145,17 +145,47 @@ ul, ol { list-style: none; }
 .sidebar .logo { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,var(--primary-400),var(--primary-500)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700 }
 .sidebar nav { display:flex; flex-direction:column; gap:6px; margin-top:12px }
 .sidebar a { display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:12px; color:var(--neutral-700); text-decoration:none }
-.sidebar a.active { background:linear-gradient(180deg,var(--primary-50),var(--primary-100)); color:var(--primary-700); }
+.sidebar a.active { background:linear-gradient(180deg,var(--primary-50),var(--primary-100)); color:var(--primary-700); box-shadow: 0 8px 20px rgba(6,72,72,0.06); transform: translateY(-2px); }
 
-.main { flex:1; display:flex; flex-direction:column; }
-.top-search { display:flex; align-items:center; gap:12px; padding:14px 20px; background:transparent; border-bottom:1px solid var(--neutral-100); }
+.sidebar-footer { display:flex; flex-direction:column; gap:8px; align-items:center; margin-top:6px }
+.sidebar-footer .mini-avatar { width:28px; height:28px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; background:var(--neutral-50); color:var(--neutral-700); font-size:13px; text-decoration:none }
+
+.main { flex:1; display:flex; flex-direction:column; align-items:center; }
+.top-search { display:flex; align-items:center; gap:12px; padding:14px 20px; background:transparent; border-bottom:1px solid var(--neutral-100); justify-content: space-between; }
+
+/* Center the main `.container` inside the main column (keeps it right of the sidebar) */
+.main .container { width:100%; max-width:1100px; padding-left: var(--space-4); padding-right: var(--space-4); box-sizing: border-box; }
+
+@media (max-width: 1000px) {
+  .main .container { width:100%; padding-left: var(--space-4); padding-right: var(--space-4); }
+}
 .search-input { flex:1; padding:10px 14px; border-radius:20px; background:var(--neutral-50); border:1px solid var(--neutral-100); }
 .top-actions { display:flex; gap:12px; align-items:center }
 
 /* Dashboard specific layout */
 .dashboard-grid { display:grid; grid-template-columns: 1fr 360px; gap:18px; padding:20px; }
-.stats-row { display:flex; gap:12px; }
-.stat-card { background:var(--neutral-0); padding:14px; border-radius:12px; box-shadow: var(--shadow-1); display:flex; align-items:center; justify-content:space-between }
+.dashboard-main-content { max-width: 920px; margin: 0 auto; }
+.stats-row { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; align-items:start; justify-items:center; }
+.stat-card { background:var(--neutral-0); padding:16px; border-radius:14px; box-shadow: var(--shadow-2); display:flex; align-items:center; justify-content:space-between; transition: box-shadow var(--transition-base), transform var(--transition-base); }
+.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-3); }
+.stat-card.stat-compact { padding:14px 16px; }
+.stat-card.stat-compact .stat-number { font-size:20px; font-weight:700; color:var(--neutral-900); margin-top:2px; }
+.stat-card.stat-compact .stat-icon { opacity:0.9; color:var(--neutral-500); }
+.stat-card.stat-compact .muted.small { font-size:12px; }
+.stats-row .stat-card { min-width:160px; max-width:220px; }
+.quick-actions-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; max-width:760px; margin: 12px auto; }
+.notification-panel-centered { max-width:760px; margin:12px auto; }
+
+/* Quick action cards */
+.quick-action { display:block; padding:14px; border-radius:12px; text-decoration:none; color:inherit; box-shadow: var(--shadow-1); transition: box-shadow var(--transition-base); }
+.qa-icon svg { width:44px; height:44px; border-radius:10px; background:transparent; padding:8px; box-sizing:content-box; color:var(--primary-700); }
+.qa-icon { display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; background:linear-gradient(180deg,var(--primary-50),#ecf9f8); color:var(--primary-700); }
+.quick-action:hover { box-shadow: var(--shadow-2); }
+
+/* Notification panel */
+.notification-list { display:flex; flex-direction:column; gap:8px }
+.notification-list .card { padding:10px; }
+
 
 .stats { display:flex; gap:12px; }
 .stat { background:var(--neutral-0); padding:12px; border-radius:var(--radius-sm); box-shadow:var(--shadow-1); min-width:120px; text-align:center }

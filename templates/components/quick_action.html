@@ -1,0 +1,15 @@
+<a href="{{ href|default:'#' }}" class="quick-action card" role="button">
+  <div style="display:flex; gap:12px; align-items:center">
+    <div class="qa-icon" aria-hidden="true">
+      {% if icon_svg %}
+        {{ icon_svg|safe }}
+      {% else %}
+        <div style="width:44px; height:44px; border-radius:10px; background:var(--primary-50); display:flex; align-items:center; justify-content:center; color:var(--primary-700);">{{ icon|default:'📦' }}</div>
+      {% endif %}
+    </div>
+    <div>
+      <div style="font-weight:700">{{ title }}</div>
+      <div class="muted" style="font-size:13px">{{ subtitle }}</div>
+    </div>
+  </div>
+</a>

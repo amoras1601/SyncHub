@@ -1,27 +1,74 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="display:flex; gap:24px; align-items:flex-start">
-    <div style="flex:1; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06)">
-        <h2>Bem-vindo ao SyncHub</h2>
-        <p>Centralize suas lojas e anúncios em um só lugar.</p>
-        <p>
-            <a class="btn" href="{% url 'core:dashboard' %}">Abrir Dashboard</a>
-            <a class="btn secondary" href="{% url 'core:produto_list' %}">Produtos</a>
-            <a class="btn secondary" href="{% url 'core:loja_list' %}">Lojas</a>
-            <a class="btn secondary" href="{% url 'core:anuncio_list' %}">Anúncios</a>
-        </p>
+<div class="dashboard-grid">
+    <div>
+        <div class="dashboard-main-content">
+            <h1>Bem-vindo de volta, {{ request.user.first_name|default:request.user.username }}!</h1>
+            <p class="muted">Aqui está o resumo das suas vendas hoje</p>
+
+            <div class="stats-row" style="margin-top:12px; display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px">
+            <div class="stat-card stat-compact">
+                <div>
+                    <div class="muted">Produtos</div>
+                    <div class="stat-number">{{ total_produtos }}</div>
+                    <div class="muted small">Total de SKUs</div>
+                </div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.732l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.732l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+            <div class="stat-card stat-compact">
+                <div>
+                    <div class="muted">Lojas</div>
+                    <div class="stat-number">{{ total_lojas }}</div>
+                    <div class="muted small">Marketplaces conectados</div>
+                </div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9.5L12 4l9 5.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+            <div class="stat-card stat-compact">
+                <div>
+                    <div class="muted">Anúncios</div>
+                    <div class="stat-number">{{ total_anuncios }}</div>
+                    <div class="muted small">Total de anúncios ativos</div>
+                </div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11v2a3 3 0 0 0 3 3h2l6 3V5L8 8H6a3 3 0 0 0-3 3z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+            <div class="stat-card stat-compact">
+                <div>
+                    <div class="muted">Ações</div>
+                    <div class="stat-number">{% with pending=notifications|length %}{{ pending }}{% endwith %}</div>
+                    <div class="muted small" style="color:var(--error-700)">Notificações</div>
+                </div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.29 3.86L1.82 11.5A2 2 0 0 0 3 15h18a2 2 0 0 0 1.19-3.5L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="margin-top:18px">Ações Rápidas</h3>
+        {% url 'core:produto_create' as produto_create_url %}
+        <div class="quick-actions-grid" style="margin-top:12px">
+            {% include 'components/quick_action.html' with title='Criar Produto' subtitle='Adicione um novo produto ao catálogo' icon_svg="<svg width='28' height='28' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 16V8a2 2 0 0 0-1-1.732l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.732l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z' stroke='currentColor' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/></svg>" href=produto_create_url %}
+            {% include 'components/quick_action.html' with title='Sincronizar Tudo' subtitle='Atualize anúncios' icon_svg="<svg width='28' height='28' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M13 2L3 14h9l-1 8L21 10h-9l1-8z' stroke='currentColor' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/></svg>" href='#' %}
+            {% include 'components/quick_action.html' with title='Ver Pedidos' subtitle='Gerencie pedidos' icon_svg="<svg width='28' height='28' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M3 3h2l.4 2M7 13h10l4-8H5.4' stroke='currentColor' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/></svg>" href='#' %}
+        </div>
+
+        <div style="margin-top:18px;">
+            <div style="max-width:760px; margin:0 auto;">
+                {% include 'components/notification_panel.html' with notifications=notifications %}
+            </div>
+        </div>
+        </div> <!-- .dashboard-main-content -->
     </div>
 
-    <div style="width:260px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06)">
-        <h3>Estatísticas</h3>
-        <ul style="list-style:none; padding:0; margin:0">
-            <li>Produtos: <strong>{{ total_produtos }}</strong></li>
-            <li>Lojas: <strong>{{ total_lojas }}</strong></li>
-            <li>Anúncios: <strong>{{ total_anuncios }}</strong></li>
-        </ul>
-        <p style="margin-top:12px"><a class="btn" href="{% url 'core:produto_create' %}">Adicionar Produto</a></p>
-    </div>
+    <aside>
+        <!-- Right column could be used for more detailed widgets later -->
+    </aside>
 </div>
 
 {% endblock %}
