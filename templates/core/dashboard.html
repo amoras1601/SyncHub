@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<div class="card grid" style="margin-bottom:16px; align-items:center">
+    {% include 'components/stat.html' with label='Produtos' value=total_produtos %}
+    {% include 'components/stat.html' with label='Lojas' value=total_lojas %}
+    {% include 'components/stat.html' with label='Anúncios' value=total_anuncios %}
+</div>
+
+<h3>Produtos recentes</h3>
+<table>
+    <thead><tr><th>SKU</th><th>Título</th><th>Atualizado</th></tr></thead>
+    <tbody>
+    {% for p in recent_produtos %}
+        <tr>
+            <td>{{ p.sku }}</td>
+            <td><a href="{% url 'core:produto_detail' p.pk %}">{{ p.title }}</a></td>
+            <td>{{ p.updated_at }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="3">Nenhum produto recente.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+    {% include 'components/fab.html' with href='/core/produtos/add/' title='Criar produto' %}
+
+{% endblock %}

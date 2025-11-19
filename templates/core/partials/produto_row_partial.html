@@ -1,0 +1,10 @@
+<tr>
+    <td>{{ p.sku }}</td>
+    <td><a href="{% url 'core:produto_detail' p.pk %}">{{ p.title }}</a></td>
+    <td>{{ p.price }}</td>
+    <td>{{ p.updated_at }}</td>
+    <td class="actions">
+        <a href="{% url 'core:produto_update' p.pk %}">Editar</a>
+        <a href="{% url 'core:produto_delete' p.pk %}">Apagar</a>
+    </td>
+</tr>

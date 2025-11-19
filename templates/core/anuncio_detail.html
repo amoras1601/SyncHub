@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Anúncio {{ anuncio.marketplace_id }}</h2>
+<p>Produto: <a href="{% url 'core:produto_detail' anuncio.produto.pk %}">{{ anuncio.produto.title }}</a></p>
+<p>Loja: <a href="{% url 'core:loja_detail' anuncio.loja.pk %}">{{ anuncio.loja.name }}</a></p>
+<p>Preço: {{ anuncio.price }} — Estoque: {{ anuncio.stock }}</p>
+<p>URL: <a href="{{ anuncio.listing_url }}">Abrir anúncio</a></p>
+
+<p>
+  <a class="btn" href="{% url 'core:anuncio_update' anuncio.pk %}">Editar</a>
+  <a class="btn secondary" href="{% url 'core:anuncio_list' %}">Voltar</a>
+</p>
+{% endblock %}

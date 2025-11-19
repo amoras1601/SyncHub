@@ -1,0 +1,11 @@
+<div class="product-card">
+  <div class="product-thumb">{{ p.title|slice:":1"|upper }}</div>
+  <div class="product-info">
+    <div class="product-title">{{ p.title }}</div>
+    <div class="product-meta">SKU: {{ p.sku }} • <span class="muted">{{ p.updated_at }}</span></div>
+  </div>
+  <div class="text-right">
+    <div class="price">R$ {{ p.price }}</div>
+    <div style="margin-top:8px"><a class="btn ghost" href="{% url 'core:produto_detail' p.pk %}">Ver</a></div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+  <h2 style="margin:0">Produtos</h2>
+  <div style="display:flex; gap:8px; align-items:center">
+    <form method="get" style="display:flex; gap:8px; align-items:center;">
+      <input class="form-control" type="text" name="q" placeholder="Buscar SKU ou título" value="{{ q }}" />
+      <button class="btn" type="submit">Buscar</button>
+    </form>
+    <div style="display:flex; gap:8px; align-items:center">
+      <button id="toggle-view" class="btn secondary" onclick="toggleView()">Grid</button>
+      <button class="btn" hx-get="{% url 'core:produto_create' %}" hx-target="#modal-body" hx-swap="innerHTML" onclick="openModal()">Novo</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <!-- Table view -->
+  <div id="table-view">
+    <table>
+      <thead>
+        <tr><th>SKU</th><th>Título</th><th>Preço</th><th>Atualizado</th><th></th></tr>
+      </thead>
+      <tbody id="produtos-tbody">
+      {% for p in produtos %}
+          <tr>
+              <td>{{ p.sku }}</td>
+              <td><a href="{% url 'core:produto_detail' p.pk %}">{{ p.title }}</a></td>
+              <td>{{ p.price }}</td>
+              <td>{{ p.updated_at }}</td>
+              <td class="actions">
+                  <a href="{% url 'core:produto_update' p.pk %}">Editar</a>
+                  <a href="{% url 'core:produto_delete' p.pk %}">Apagar</a>
+              </td>
+          </tr>
+      {% empty %}
+          <tr><td colspan="5">Nenhum produto cadastrado.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Grid view -->
+  <div id="grid-view" class="hidden" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+    {% for p in produtos %}
+      <div>
+        {% include 'core/partials/produto_card_partial.html' with p=p %}
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% if paginator.num_pages > 1 %}
+<div style="margin-top:12px; display:flex; gap:12px; align-items:center">
+    {% if produtos.has_previous %}
+        <a class="btn secondary" href="?q={{ q }}&page={{ produtos.previous_page_number }}">Anterior</a>
+    {% endif %}
+    <div class="muted">Página {{ produtos.number }} de {{ paginator.num_pages }}</div>
+    {% if produtos.has_next %}
+        <a class="btn" href="?q={{ q }}&page={{ produtos.next_page_number }}">Próxima</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Floating action button for quick create -->
+<button class="fab" hx-get="{% url 'core:produto_create' %}" hx-target="#modal-body" hx-swap="innerHTML" aria-label="Criar produto">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+</button>
+
+{% endblock %}

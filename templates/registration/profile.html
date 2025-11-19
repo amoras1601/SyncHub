@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Meu Perfil</h2>
+<p><strong>Usuário:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+
+<h3>Minhas Lojas</h3>
+<table>
+    <thead><tr><th>Nome</th><th>Marketplace</th><th>External ID</th><th></th></tr></thead>
+    <tbody>
+    {% for l in lojas %}
+    <tr>
+        <td>{{ l.name }}</td>
+        <td>{{ l.get_marketplace_display }}</td>
+        <td>{{ l.external_id }}</td>
+        <td><a href="{% url 'core:loja_detail' l.pk %}">Abrir</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">Você não possui lojas cadastradas.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<p><a class="btn" href="{% url 'core:loja_create' %}">Adicionar Loja</a></p>
+
+{% endblock %}

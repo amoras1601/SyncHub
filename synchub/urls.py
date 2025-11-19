@@ -22,4 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('ml/', include('mercadolivre.urls', namespace='mercadolivre')),
+    path('core/', include('core.urls', namespace='core')),
+    path('accounts/profile/', views.profile, name='profile'),
+    
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

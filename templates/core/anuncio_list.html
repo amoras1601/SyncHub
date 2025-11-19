@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Anúncios</h2>
+
+<form method="get" style="margin-bottom:12px">
+    <input type="text" name="q" placeholder="Buscar anúncio, produto ou loja" value="{{ q }}" />
+    <button class="btn" type="submit">Buscar</button>
+</form>
+
+<p><a class="btn" href="{% url 'core:anuncio_create' %}">Novo anúncio</a></p>
+
+<table>
+    <thead><tr><th>Marketplace ID</th><th>Produto</th><th>Loja</th><th>Preço</th><th>Estoque</th></tr></thead>
+    <tbody>
+    {% for a in anuncios %}
+        <tr>
+            <td>{{ a.marketplace_id }}</td>
+            <td>{{ a.produto.title }} ({{ a.produto.sku }})</td>
+            <td>{{ a.loja.name }}</td>
+            <td>{{ a.price }}</td>
+            <td>{{ a.stock }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">Nenhum anúncio.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if paginator.num_pages > 1 %}
+<div style="margin-top:12px">
+    {% if anuncios.has_previous %}
+        <a class="btn secondary" href="?q={{ q }}&page={{ anuncios.previous_page_number }}">Anterior</a>
+    {% endif %}
+    Página {{ anuncios.number }} de {{ paginator.num_pages }}
+    {% if anuncios.has_next %}
+        <a class="btn" href="?q={{ q }}&page={{ anuncios.next_page_number }}">Próxima</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

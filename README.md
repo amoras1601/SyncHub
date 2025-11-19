@@ -20,23 +20,73 @@ O sistema foi projetado como uma **aplicação web monolítica** utilizando o fr
     - **Containerização:** Docker.
     - **CI/CD:** GitHub Actions para automação de build, teste e deploy.
 
+## Instalação
+
+Siga os passos abaixo para executar o projeto localmente em um ambiente de desenvolvimento com o banco SQLite (sem Docker):
+
+1. Crie e ative o ambiente virtual:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+2. Instale dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Aplique migrações e crie um superusuário:
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+4. Rode o servidor de desenvolvimento:
+
+```bash
+python manage.py runserver
+```
+
+5. Acesse no navegador: `http://127.0.0.1:8000/`
+
 ## Lista de Tarefas (TODO)
 
-- [ ] **Core:**
-    - [ ] Configurar projeto Django e estrutura inicial.
-    - [ ] Implementar autenticação de usuário e arquitetura multi-tenant.
-    - [ ] Modelar e implementar o schema do banco de dados (`ProdutoCentral`, `Loja`, `Anuncio`).
-- [ ] **Integrações:**
-    - [ ] Desenvolver módulo de conexão OAuth2 para Mercado Livre e Shopee.
-    - [ ] Implementar webhook listeners para receber notificações de pedidos (`orders_v2`).
-    - [ ] Criar tarefas assíncronas (Celery) para processar webhooks e buscar detalhes dos pedidos.
-    - [ ] Desenvolver lógica para atualizar o estoque nos marketplaces via API.
-- [ ] **Funcionalidades:**
-    - [ ] Construir o módulo de gerenciamento de catálogo de produtos (CRUD de `ProdutoCentral`).
-    - [ ] Desenvolver a lógica de vinculação entre `ProdutoCentral` e anúncios (`Anuncio`).
-    - [ ] Implementar o painel de controle (dashboard) com as principais métricas de vendas.
-    - [ ] Criar a interface de usuário (UI/UX) para todas as funcionalidades.
-- [ ] **DevOps & Infra:**
-    - [ ] Escrever `Dockerfile` e `docker-compose.yml` para ambientes de desenvolvimento e produção.
-    - [ ] Configurar o pipeline de CI/CD com GitHub Actions para deploy na AWS.
-    - [ ] Implementar estratégia de testes unitários e de integração.
+Abaixo está o estado atual das principais tarefas do projeto, organizado por prioridade. Marquei o que já foi implementado, o que está em progresso e o que ainda falta.
+
+- [x] **UX / Design & Frontend**
+    - [x] Extrair tokens e styles do design React (`SyncHub UI_UX Design`) e gerar `static/css/ui.css`.
+    - [x] Criar `base.html` com topbar, sidebar e layout principal.
+    - [x] Implementar dashboard inicial (cards, estatísticas básicas).
+    - [x] Implementar lista de produtos (tabela + grid) com modal de criação via HTMX.
+    - [x] Adicionar variação de card para produtos e polir estilos (botões, inputs, tabelas).
+    - [x] Avatar no cabeçalho com dropdown; FAB acessível com SVG.
+    - [ ] Polir dashboard para ficar fiel ao layout de referência (stat cards, ações rápidas, notificações).
+
+- [x] **Core & Models**
+    - [x] Scaffold do app `core` e modelos iniciais (`ProdutoCentral`, `Loja`, `Anuncio`).
+    - [ ] Ajustes finos e decisão sobre campo opcional de imagem (`image`) para `ProdutoCentral` (migração necessária).
+
+- [~] **Views & Interatividade**
+    - [x] CRUD básico para produtos/lojas/anúncios com templates.
+    - [~] Suporte HTMX nas operações de criação (modal) — em uso; melhorar validação inline.
+    - [ ] Finalizar página de detalhe de anúncio (`anuncio_detail`).
+    - [in-progress] Portar/terminar `produto_detail` com layout final (visual polishing em andamento).
+
+- [ ] **Autenticação & Permissões**
+    - [x] Integração básica com `django.contrib.auth` (login/logout/profile).
+    - [ ] Implementar permissões owner-only para edição/exclusão de `Loja` e `Anuncio`.
+
+- [ ] **Integrações & Automação**
+    - [ ] Implementar OAuth para marketplaces (Mercado Livre, Shopee) — skeleton `mercadolivre` criado, integração pendente.
+    - [ ] Criar listeners/webhooks para receber eventos de pedidos e atualizações.
+    - [ ] Implementar tarefas assíncronas (Celery + Redis) para processar webhooks e sincronizações.
+
+- [ ] **Qualidade & Infra**
+    - [ ] Adicionar testes unitários e de integração para models e views.
+    - [ ] Escrever `Dockerfile` e `docker-compose.yml` para ambiente de desenvolvimento.
+    - [ ] Configurar pipeline de CI/CD (GitHub Actions) para build e deploy.
+    - [ ] Revisar requisitos e `requirements.txt` (atualizar versões se necessário).
+    - [ ] Melhorar acessibilidade (focus-trap no modal, keyboard navigation, roles/labels).

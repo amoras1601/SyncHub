@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card header">
+    <div style="display:flex; gap:16px; align-items:center">
+        <div class="product-thumb" aria-hidden="true">{{ produto.title|slice:":1"|upper }}</div>
+        <div>
+            <h1 style="margin:0">{{ produto.title }} <small class="muted">({{ produto.sku }})</small></h1>
+            <div style="margin-top:8px" class="product-meta">{{ produto.description }}</div>
+        </div>
+    </div>
+    <div style="text-align:right">
+        <div class="price">R$ {{ produto.price }}</div>
+        <div style="margin-top:8px; display:flex; gap:8px; justify-content:flex-end">
+            <a class="btn" href="{% url 'core:produto_update' produto.pk %}">Editar</a>
+            <a class="btn secondary" href="{% url 'core:produto_list' %}">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<h3 style="margin-top:18px">Anúncios vinculados</h3>
+{% if anuncios %}
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-top:12px">
+        {% for a in anuncios %}
+            <div class="card product-card">
+                <div style="flex:1">
+                    <div style="font-weight:600">{{ a.marketplace_id }}</div>
+                    <div class="product-meta">Loja: {{ a.loja.name }} • Estoque: {{ a.stock }}</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="price">R$ {{ a.price }}</div>
+                    <div style="margin-top:8px"><a class="btn ghost" href="#">Abrir</a></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card" style="margin-top:12px">Nenhum anúncio vinculado.</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ action }} Anúncio</h2>
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <p>
+        <button class="btn" type="submit">{{ action }}</button>
+        <a class="btn secondary" href="{% url 'core:anuncio_list' %}">Cancelar</a>
+    </p>
+</form>
+{% endblock %}

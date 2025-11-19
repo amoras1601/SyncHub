@@ -1,0 +1,13 @@
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+    <h3 style="margin:0">Criar produto</h3>
+    <button class="btn secondary" onclick="closeModal()">Fechar</button>
+  </div>
+  <form id="produto-create-form" method="post" hx-post="{% url 'core:produto_create' %}" hx-target="#produtos-tbody" hx-swap="afterbegin">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div style="margin-top:12px">
+      <button class="btn" type="submit">Criar</button>
+    </div>
+  </form>
+</div>
